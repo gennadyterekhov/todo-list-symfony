@@ -20,11 +20,13 @@ final class Version20250210143301 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
+
+        // enum is not supported by doctrine
         $this->addSql("CREATE TABLE task (
             id INT AUTO_INCREMENT NOT NULL,
             title LONGTEXT NOT NULL,
             description LONGTEXT NOT NULL,
-            status ENUM('new', 'in_progress', 'done') NOT NULL default 'new',
+            status varchar(20) NOT NULL default 'new',
             created_at DATETIME NOT NULL COMMENT '(DC2Type:datetimetz_immutable)' default CURRENT_TIMESTAMP,
             updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetimetz_immutable)' default CURRENT_TIMESTAMP,
             PRIMARY KEY(id)
