@@ -5,6 +5,7 @@ namespace App\Tests\Feature\Repository;
 use App\Entity\Task;
 use App\Repository\TaskRepository;
 use App\Tests\RefreshDatabaseTestCase;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class TaskRepositoryTest extends RefreshDatabaseTestCase
 {
@@ -32,6 +33,12 @@ class TaskRepositoryTest extends RefreshDatabaseTestCase
         /** @var Task $task1 */
         $task1 = $this->repository->find(1);
         self::assertEquals('test', $task1->getTitle());
+    }
+
+    public function testExceptionIfNotFound()
+    {
+        self::expectException(NotFoundHttpException::class);
+        $this->repository->getOrThrow(1);
     }
 
     public function testCanDeleteTask()

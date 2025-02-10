@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+use App\Enum\Status;
 use App\Repository\TaskRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 class Task
@@ -78,9 +80,16 @@ class Task
         return $this->status;
     }
 
+    /**
+     * @throws Exception
+     */
     public function setStatus(string $status): static
     {
-        $this->status = $status;
+        $enum = Status::tryFrom($status);
+        if (!$enum) {
+            throw new Exception('unsupported status ' . $status);
+        }
+            $this->status = $enum->value;
 
         return $this;
     }
