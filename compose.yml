@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+
+  php-fpm:
+    container_name: php-fpm
+    build:
+      context: .
+      dockerfile: ./docker/php-fpm/Dockerfile
+    depends_on:
+      - db
+    volumes:
+      - ./:/var/www
+    entrypoint: []
+    command: sh -c "/usr/local/bin/docker-php-entrypoint && exec php-fpm"
+
+  db:
+    container_name: db
+    image: mysql:8
+    volumes:
+      - dbdata:/var/lib/mysql/:cached
+    environment:
+      MYSQL_DATABASE: todolist_db
+      MYSQL_PASSWORD: todolist_pass
+      MYSQL_ROOT_PASSWORD: todolist_pass
+      MYSQL_USER: todolist_user
+    ports:
+      - "33006:3306"
+
+  nginx:
+    container_name: nginx
+    image: nginx:1.23.1-alpine
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d
+    depends_on:
+      - php-fpm
+    ports:
+      - "80:80"
+
+volumes:
+  dbdata: ~
