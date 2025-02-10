@@ -3,15 +3,16 @@
 namespace App\Tests;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class RefreshDatabaseTestCase extends KernelTestCase
+class RefreshDatabaseWebTestCase extends WebTestCase
 {
     protected EntityManagerInterface $entityManager;
 
     protected function setUp(): void
     {
         parent::setUp();
+        self::createClient();
 
         $this->entityManager = static::getContainer()->get(EntityManagerInterface::class);
         RefreshDatabase::clearDb($this->entityManager);

@@ -8,6 +8,7 @@ use App\Repository\TaskRepository;
 use App\Request\CreateTaskRequest;
 use App\Request\UpdateTaskRequest;
 use DateTimeImmutable;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class TaskService
 {
@@ -24,6 +25,9 @@ final class TaskService
         return $task;
     }
 
+    /**
+     * @throws NotFoundHttpException
+     */
     public function getOrThrow(int $id): Task
     {
         return $this->repository->getOrThrow($id);
@@ -44,11 +48,24 @@ final class TaskService
             ->setStatus($request->getStatus()->value)
             ->setUpdatedAt(new DateTimeImmutable());
         $this->repository->update($task);
+
         return $task;
+    }
+
+    public function updateById(int $id, UpdateTaskRequest $request): Task
+    {
+        $task = $this->getOrThrow($id);
+
+        return $this->update($task, $request);
     }
 
     public function delete(Task $task): void
     {
         $this->repository->delete($task);
+    }
+
+    public function deleteById(int $id): void
+    {
+        $this->delete($this->getOrThrow($id));
     }
 }

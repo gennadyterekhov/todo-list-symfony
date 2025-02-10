@@ -24,12 +24,16 @@ class TaskRepository extends ServiceEntityRepository
         return $task;
     }
 
+    /**
+     * @throws NotFoundHttpException
+     */
     public function getOrThrow(int $id): Task
     {
         $task = $this->findById($id);
         if (!$task) {
             throw new NotFoundHttpException();
         }
+
         return $task;
     }
 
