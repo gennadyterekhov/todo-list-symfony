@@ -52,7 +52,7 @@ class TaskServiceTest extends RefreshDatabaseTestCase
 
         $updateDto = new UpdateTaskRequest('title upd', 'desc upd', 'hello');
 
-        $updated = $this->service->update($newTask, $updateDto);
+        $updated = $this->service->update($newTask->getId(), $updateDto);
         self::assertEquals('title upd', $updated->getTitle());
         self::assertEquals('desc upd', $updated->getDescription());
         self::assertEquals(Status::InProgress->value, $updated->getStatus());
