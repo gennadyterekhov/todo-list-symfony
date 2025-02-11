@@ -31,7 +31,7 @@ class TaskRepository extends ServiceEntityRepository
     {
         $task = $this->findById($id);
         if (!$task) {
-            throw new NotFoundHttpException();
+            throw new NotFoundHttpException('task not found. id: ' . $id);
         }
 
         return $task;

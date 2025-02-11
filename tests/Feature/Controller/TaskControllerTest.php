@@ -85,6 +85,16 @@ class TaskControllerTest extends RefreshDatabaseWebTestCase
         self::assertCount(4, $response);
     }
 
+    public function testErrorInJson()
+    {
+        $this->getClient()->jsonRequest('GET', '/api/tasks/1');
+        $this->assertResponseStatusCodeSame(404);
+
+        $response = json_decode($this->getClient()->getResponse()->getContent(), true);
+        self::assertIsArray($response);
+        self::assertArrayHasKey('message', $response);
+    }
+
     public function createSeveralTasks(): array
     {
         $service = $this->getContainer()->get(TaskService::class);
