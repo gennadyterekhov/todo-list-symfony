@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+
+  # for local tests
+  db-test:
+    container_name: db-test
+    image: mysql:8
+    volumes:
+      - dbdata-test:/var/lib/mysql/:cached
+    environment:
+      MYSQL_DATABASE: todolist_db_test
+      MYSQL_PASSWORD: todolist_pass
+      MYSQL_ROOT_PASSWORD: todolist_pass
+      MYSQL_USER: todolist_user
+    ports:
+      - "33007:3306"
+
+
+volumes:
+  dbdata-test: ~
